@@ -18,7 +18,7 @@ parameters {
     vector[P] RP_pollster;  
     real<lower=0> sd_pollster; // hyperparameter for pollster errors
     
-    real<lower=0,upper=1> alpha_undecided; // baseline undecided
+    real alpha_undecided; // baseline undecided
     real beta_undecided;  // trend in undecided
     
     vector[N] RP_poll;  
@@ -28,7 +28,7 @@ parameters {
 transformed parameters {
     vector[W] logit_dem; // democratic support by week (main param)
     vector[N] logit_poll; // support for dem. in specific poll
-    vector[W] prop_undecided;
+    vector[W] logit_undecided;
     
     vector[P] pollster_error;  
     vector[N] poll_error; 
@@ -41,7 +41,7 @@ transformed parameters {
         logit_dem[i] = rho*logit_dem[i-1] + sd_walk*delta_dem[i];
         
     for (i in 1:W)
-        prop_undecided[i] = alpha_undecided + i*beta_undecided;
+        logit_undecided[i] = alpha_undecided + i*beta_undecided;
     
     for (i in 1:N)
         logit_poll[i] = logit_dem[w[i]]  + sd_pollster*pollster_error[p[i]] 
@@ -50,14 +50,14 @@ transformed parameters {
 
 model {
     for (i in 1:N)
-        n_side[i] ~ binomial_logit(n_resp[i], 1 - prop_undecided[w[i]]);
+        n_side[i] ~ binomial_logit(n_resp[i], -logit_undecided[w[i]]);
     n_dem ~ binomial_logit(n_side, logit_poll);
     
     delta_dem ~ normal(0, 1);
     
     RP_pollster ~ normal(0, 1);
     RP_poll ~ normal(0, 1);
-    alpha_undecided ~ beta(2, 2);
+    alpha_undecided ~ normal(0, 10);
     beta_undecided ~ normal(0, 1);
     
     sd_walk ~ student_t(4, 0, 0.1);
@@ -69,10 +69,12 @@ model {
 generated quantities {
     vector[N] log_lik;
     vector[W] dem_margin; 
+    vector[W] prop_undecided; 
     
     for (i in 1:N) 
-        log_lik[i] = binomial_logit_lpmf(n_side[i] | n_resp[i], 1 - prop_undecided) +
+        log_lik[i] = binomial_logit_lpmf(n_side[i] | n_resp[i], -logit_undecided[w[i]]) +
                         binomial_logit_lpmf(n_dem[i] | n_side[i], logit_poll[i]);
                         
+    prop_undecided = inv_logit(logit_undecided);
     dem_margin = 2*inv_logit(logit_dem) - 1;
 }

@@ -36,18 +36,20 @@ model.data = list(W = n.weeks,
 
 intent.model = stan(file="intent-model.stan", model_name="intent",
                     data=model.data, iter=10000, warmup=3000, chains=1,
-                    control = list(adapt_delta = 0.99))
+                    control=list(adapt_delta = 0.99))
 log.lik.int = extract_log_lik(intent.model, "log_lik")
 
 und.model = stan(file="intent-model-und.stan", model_name="undecided",
                     data=model.data, iter=10000, warmup=3000, chains=1,
-                    control = list(adapt_delta = 0.99))
+                    control=list(adapt_delta = 0.99))
 log.lik.und = extract_log_lik(und.model, "log_lik")
 
-launch_shinystan(intent.model)
+launch_shinystan(und.model)
 
 print(intent.model, pars=c("poll_error", "logit_poll", "log_lik", "logit_dem",
-                           "RP_pollster", "RP_poll", "delta_dem"), include=F)
+                       "RP_pollster", "RP_poll", "delta_dem"), include=F)
+print(und.model, pars=c("poll_error", "logit_poll", "log_lik", "logit_dem", "logit_undecided",
+                       "RP_pollster", "RP_poll", "delta_dem", "delta_undecided"), include=F)
 
 # plot dem. support estimates
 estimates = rstan::extract(intent.model, pars="dem_margin")$dem_margin
