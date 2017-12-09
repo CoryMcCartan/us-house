@@ -3,4 +3,4 @@
 *.bak
 *.swp
 .DS_Store
-
+.Rhistory
