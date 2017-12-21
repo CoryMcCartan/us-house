@@ -17642,7 +17642,7 @@ window.getOddsFraction = function(odds) {
         for (let y = 8; y >= 1; y--) {
             for (let x = 9; x >= y; x--) {
                 let error = Math.abs(x/y - odds);
-                if (error < best) {
+                if (error <= best) {
                     best = error;
                     X = x;
                     Y = y;

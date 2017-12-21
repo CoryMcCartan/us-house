@@ -169,8 +169,8 @@ post_pred = function(est, new.d) {
 seats = post_pred(est, election.d)
 
 s.expected = median(seats)
-s.min = quantile(seats, 0.1)
-s.max = quantile(seats, 0.9)
+s.min = quantile(seats, 0.05)
+s.max = quantile(seats, 0.95)
 gain = s.expected - current.seats
 prob = mean(seats >= 218)
 prob.gain = mean(seats >= current.seats) # dem. gain
@@ -178,7 +178,7 @@ prob.popv = pnorm(0, mean=logit.est, sd=logit.sd, lower.tail=F) # win pop. vote
 seats.dist = hist(seats, br=0:436, plot=F)$density
 # voter intent
 mrg = as.data.frame(t(apply(samples$dem_margin, 2, quantile, 
-                            probs=c(0.10, 0.50, 0.90))))
+                            probs=c(0.05, 0.50, 0.95))))
 names(mrg) = c("low", "median", "high")
 mrg$week = election.day - 7*(nrow(mrg):1 - 1)
 
@@ -215,6 +215,8 @@ if (file.exists(opt$history_file)) {
 }
 history = rbind(history, data.frame(date=from.date, prob=prob, gain=gain))
 write.csv(history, opt$history_file, row.names=F)
+
+if (from.date != Sys.Date()) quit("no") # only save full output if current run
 
 # snapshot
 output.data = list(
