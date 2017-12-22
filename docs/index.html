@@ -50,14 +50,54 @@
             <span class="updated"></span>
         </section>
 
+        <p>
+        This is a statistical model of the 2018 midterm elections for the U.S.
+        House of Representatives. Using polling data, approval ratings,
+        structural factors, and economic indicators, it estimates the number of
+        seats each party will win, and their odds of winning control of the
+        House. 
+        </p>
+        <p>
+        More details about the model itself may be found 
+        <a href="#model">below</a>.
+        </p>
+
+
         <section class="content-block">
             <h2>How the odds have changed</h2>
+            <p>
+            The model is continuously updated with new polling data and
+            approval ratings. As new information comes in, the odds may shift
+            towards one party or another. Additionally, as we get closer to the
+            election, there is less uncertainty in the result, since there is
+            less time for a large shift in public opinion. This also changes
+            the odds over time.
+            </p>
+            <p>
+            The chart below plots the changin  odds of each party winning
+            control. The estimates are plotted on a log-odds scale, instead of a
+            traditional probability scale ranging from 0 to 100%. This is to 
+            better reflect changes in probability—a shift from a 90% to 95%
+            chance is much more consequential than a change from 50 to 55%.
+            </p>
             <div height="320" id="history" class="graphic"></div>
         </section>
 
         <section class="content-block">
             <a class="anchor" id="hist"></a>
-            <h2>Likely outcomes</h2>
+            <h2>Distribution of outcomes</h2>
+            <p>
+            The model doesn't produce a single estimate of the number of seats
+            each party will win. Rather, it estimates a probability for each
+            possible arrangement of seats. The model's overall guess is the
+            median of the distribution of seats—it is just as likely that the
+            Democrats will win more seats as fewer seats.
+            </p>
+            <p>
+            The table below summarizes the relative chances of each possible
+            distribution of seats. The current distribution and the median
+            outcome are highlighted. 218 seats are needed to control the House.
+            </p>
             <table id="outcomes">
                 <thead>
                 <tr>
@@ -79,12 +119,37 @@
         <section class="content-block">
             <a class="anchor" id="polling"></a>
             <h2>National Polling</h2>
+            <p>
+            The basis of the model is the generic congressional ballot, which 
+            asks survey respondents which parties' candidate they plan on
+            supporting in their local House race. The model estimates the true
+            support for each party over time, and forecasts this estimate
+            forwards to Election Day.  The chart below plots these estimates,
+            along with an accompanying error bar indicating the uncertainty in
+            the estimates. Notice how the uncertainty increases dramatically
+            from today towards Election Day.
+            </p>
             <div height="320" id="generic" class="graphic"></div>
         </section>
 
         <section>
             <a class="anchor" id="model"></a>
             <h2>Model</h2>
+            <p>
+            The model operates in two broad stages: first, it estimates
+            national voter intent on a weekly basis and forecasts this estimate
+            forwards to Election Day; second, it uses its voter intent estimate
+            to predict the number of seats won by each party, using past
+            elections as a guide.
+            </p>
+
+            <h3>Voter Intent Model</h3>
+            <p>
+            </p>
+
+            <h3>Final Results Model</h3>
+            <p>
+            </p>
         </section>
 
     </main>

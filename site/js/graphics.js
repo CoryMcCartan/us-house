@@ -41,11 +41,11 @@ function overview(data, el) {
         .datum({ startAngle: left + minAngle,
                  endAngle: left + demAngle })
         .style("fill", LIGHT_BLUE);
-    /*
+    ///*
     let dem_gain = g.append("path")
         .datum({ startAngle: left + currentAngle, endAngle: left + demAngle })
-        .style("fill", "url(#crosshatch)") 
-        .style("opacity", 0.25); */
+        .style("fill", "white") 
+        .style("opacity", 0.2); //*/
 
     let gop = g.append("path")
         .datum({ startAngle: right - gopAngle, endAngle: right })
@@ -80,14 +80,13 @@ function overview(data, el) {
         .style("fill", "white")
         .style("font-weight", "bold")
         .attr("text-anchor", "end")
-        .attr("dx", -15)
+        .attr("dx", -8)
         .text(Math.round(data.seats));
     let gained = Math.round(data.gain);
     let gainText = g.append("text")
         .style("fill", "white")
-        .style("font-size", "20px")
         .attr("text-anchor", "end")
-        .attr("dx", -15)
+        .attr("dx", -8)
         .text((gained > 0 ? "+" : "") + gained);
 
     let demProbText = g.append("text")
@@ -154,7 +153,7 @@ function overview(data, el) {
 
         dem.attr("d", arc);
         dem_error.attr("d", arc);
-        //dem_gain.attr("d", arc);
+        dem_gain.attr("d", d3.arc().innerRadius(oR - 15).outerRadius(oR));
         gop.attr("d", arc);
         gop_error.attr("d", arc);
 
@@ -176,16 +175,16 @@ function overview(data, el) {
             .attr("x2", x2)
             .attr("y2", y2);
 
-        let placement = bigScreen() ? (0.5*oR + 0.5*iR) : (0.3*oR + 0.7*iR);
-        [x, y] = getCoords(left + demAngle, placement);
+        let placement = bigScreen() ? (0.5*oR + 0.5*iR) : (0.4*oR + 0.6*iR);
+        [x, y] = getCoords(0, placement);
         seatsText
             .attr("x", x)
             .attr("y", y)
-            .attr("font-size", bigScreen() ? 36 : 0.15*h);
+            .attr("font-size", bigScreen() ? 48 : 0.16*h);
         gainText
             .attr("x", x)
-            .attr("y", y + 22)
-            .style("opacity", bigScreen() ? 1 : 0); // hide on small screens
+            .attr("y", y + (bigScreen() ? 28 : 0.1*h))
+            .attr("font-size", bigScreen() ? 30 : 0.11*h);
 
         [x, ] = getCoords(left, 0.5*oR + 0.5*iR);
         demProbText
@@ -199,6 +198,7 @@ function overview(data, el) {
     draw();
     window.addEventListener("resize", draw);
 }
+
 
 /*
  * Create history graphic.
@@ -367,6 +367,7 @@ function history(data, el) {
             .call(yAxis);
 
         let line = d3.line()
+            .curve(d3.curveCatmullRom)
             .x(d => x(d.date))
             .y(d => y(d.odds));
 
@@ -434,11 +435,14 @@ function history(data, el) {
     svg.on("mouseout", resetTooltip);
 }
 
+
 /*
  * Create a polling graphic.
  * Line plot of generic congressional ballot over time.
  */
 function generic(data, el) {
+    let today = new Date(data.date);
+
     data = data.intent.map(d => ({ 
         date: new Date(d.week),
         margin: d.median,
@@ -462,7 +466,6 @@ function generic(data, el) {
     let last = data.length - 1;
     let startDate = data[0].date;
     let endDate = data[last].date;
-    let today = Date.now();
 
     let x = d3.scaleTime()
         .domain([startDate, endDate]);
@@ -485,12 +488,11 @@ function generic(data, el) {
         .style("text-anchor", "end")
         .text("DEM. MARGIN");
 
-    const ONE_DAY = 1000 * 60 * 60 * 24;
     g.append("path")
-        .datum(data.filter(d => d.date <= today + 3*ONE_DAY))
+        .datum(data.filter(d => d.date <= today))
         .attr("class", "past line");
     g.append("path")
-        .datum(data.filter(d => d.date >= today - 3*ONE_DAY))
+        .datum(data.filter(d => d.date >= today))
         .attr("class", "future line")
         .style("stroke-dasharray", "4,4");
 
@@ -607,11 +609,13 @@ function generic(data, el) {
         let errTop = d3.area()
             .x(d => x(d.date))
             .y0(d => y(d.margin))
-            .y1(d => y(d.top));
+            .y1(d => y(d.top))
+            .curve(d3.curveBasis);
         let errBot = d3.area()
             .x(d => x(d.date))
             .y0(d => y(d.bot))
-            .y1(d => y(d.margin));
+            .y1(d => y(d.margin))
+            .curve(d3.curveBasis);
         
         svg.select(".err.top").attr("d", errTop);
         svg.select(".err.bot").attr("d", errBot);
@@ -665,6 +669,7 @@ function generic(data, el) {
     svg.on("mouseout", resetTooltip);
 }
 
+
 /*
  * Create a table of likely outcomes.
  * Includes a vertical histogram.
@@ -716,6 +721,7 @@ function outcomes(data, el) {
         ][i])
         .attr("class", (d, i) => [,,"maj","gain",,"hist","label"][i]);
 }
+
 
 export default {
     overview,
