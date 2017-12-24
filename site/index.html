@@ -77,8 +77,8 @@
             The chart below plots the changin  odds of each party winning
             control. The estimates are plotted on a log-odds scale, instead of a
             traditional probability scale ranging from 0 to 100%. This is to 
-            better reflect changes in probability—a shift from a 90% to 95%
-            chance is much more consequential than a change from 50 to 55%.
+            better reflect changes in probability&mdash;a shift from a 90% to
+            95% chance is much more consequential than a change from 50 to 55%.
             </p>
             <div height="320" id="history" class="graphic"></div>
         </section>
@@ -90,8 +90,8 @@
             The model doesn't produce a single estimate of the number of seats
             each party will win. Rather, it estimates a probability for each
             possible arrangement of seats. The model's overall guess is the
-            median of the distribution of seats—it is just as likely that the
-            Democrats will win more seats as fewer seats.
+            median of the distribution of seats&mdash;it is just as likely
+            that the Democrats will win more seats as fewer seats.
             </p>
             <p>
             The table below summarizes the relative chances of each possible
@@ -140,15 +140,123 @@
             national voter intent on a weekly basis and forecasts this estimate
             forwards to Election Day; second, it uses its voter intent estimate
             to predict the number of seats won by each party, using past
-            elections as a guide.
+            elections as a guide. The models for each of these stages  are
+            described in more detail below.
+            </p>
+            <p>
+            Each model is fully Bayesian and is estimated using Hamiltonian
+            Monte Carlo (through the statistical package STAN). Weakly
+            informative priors are used on all paramters. The voter intent model
+            is re-estimated with each new set of polling data. The final
+            results model, in contrast, is fit once on past election data, and
+            the posterior samples are used to provide predictions for the 2018
+            elections.
             </p>
 
             <h3>Voter Intent Model</h3>
             <p>
+            Voter intent is estimated from generic ballot polls conducted by 
+            various polling firms. These ask survey respondents which parties'
+            candidate they plan on supporting in their local House race. By
+            aggregating poll results we can arrive at an estimate of national
+            voter intent.
             </p>
+            <p>
+            Voter intent is estimated on a weekly basis, from the first week of
+            polling through Election Day. It is measured on a log-odds scale
+            and is denoted $\mu_t$, where $t$ is the week in question. Intent
+            is assumed to evolve as an AR(1) process, or mean-reverting random
+            walk: $$
+                \mu_t \sim \mathrm{t}_{\nu}(\rho\cdot\mu_{t-1}, \sigma^2_w),
+            $$
+            where $\rho$ is a parameter representing the strength of the mean
+            reversion (restricted to be between 0 and 1),  $\sigma^2_w$ is the
+            variance of the random walk, and $\nu$ is the degrees of freedom of
+            the <i>t</i>-distribution. The heavier tails of the
+            <i>t</i>-distribution allow more extreme shifts in public opinion
+            to occur, which may happen after a significant policital
+            development. The priors for the parameters are: 
+            $$ \begin{align} 
+                \mu_0 &\sim \mathrm{t}_{\nu}(0, 10^2) \\ 
+                \nu &\sim \Gamma(2, 0.1) \\
+                \sigma_w &\sim \mathrm{Cauchy}^+(0, 10) \\
+                \rho &\sim \mathrm{Beta}(2, 1)
+            \end{align}$$
+            </p>
+            <p>
+            Polling results are derived from national voter intent. For each 
+            poll $i$ we record the sample size, $n_i$, the week it was conducted,
+            $t_i$, the polling firm which conducted it, $f_i$, the number of 
+            respondents picking either major party (as opposed to 
+            &ldquo;undecided&rdquo;), $n^s_i$, and the number picking the 
+            Democratic party, $n^d_i$. Both $n^s_i$ and $n^d_i$ are drawn from
+            a binomial distribution,
+            $$ \begin{align} 
+                n^s_i &\sim \mathrm{Binomial}(n_i, \pi_u) \\
+                n^d_i &\sim \mathrm{Binomial}(n^s_i, \pi_i) 
+            \end{align}$$
+            where $\pi_u$ is the proportion of undecided voters nationally, and
+            $\pi_i$ is the level of support for the Democrats in the given poll.
+            This differs from $\mu$, since polling firms sample differently and
+            have different methodologies. $\pi_i$ is modelled on a log-odds
+            scale as a linear function of national voter intent, polling firm
+            bias, and poll-specific (sampling) error:
+            $$
+                \mathrm{logit}(\pi_i) = \mu_{t_i} + \alpha_{f_i} + \epsilon_i,
+            $$
+            where $\alpha_{f_i}$ is the bias of the polling firm $f_i$ and 
+            $\epsilon_i$ is the poll-specific error. Both $\alpha_{f_i}$ and 
+            $\epsilon_i$ are assumed to be drawn from larger distributions of
+            all possible firm and poll errors:
+            $$ \begin{align} 
+                \alpha \sim \mathrm{t}_2(0, \sigma^2_f) \\
+                \epsilon \sim \mathrm{t}_2(0, \sigma^2_\epsilon)
+            \end{align}$$
+            The priors for the variance hyperparameters are
+            $$ \begin{align} 
+                \sigma_f &\sim \mathrm{Cauchy}^+(0, 10) \\
+                \sigma_\epsilon &\sim \mathrm{Cauchy}^+(0, 10) 
+            \end{align}$$
+            </p>
+
+            $$ \begin{align} 
+            \end{align}$$
 
             <h3>Final Results Model</h3>
             <p>
+            The final results model is essentially a linear model regressing
+            the change in Democratic seats on national voter intent and several
+            other structural and economic covariates. Importantly, measurement
+            error in voter intent is explicitly modelled.
+            </p>
+            <p>
+            The model is fit using data from the 1974, 1982, 1994, 1998, 2000,
+            2002, 2004, 2006, 2008, 2010, 2012, and 2014 House elections, which
+            were all the years in which generic ballot polling data were
+            available.
+            </p>
+            <p>
+            The number of seats won by the Democratic party in election $j$ is
+            denoted $s_j$. Voter intent at Election Day, measured on a log-odds
+            scale, is denoted $\mu$, and all other covariates are included in a
+            vector $X$. Then the model specification is
+            $$
+            s_j-s_{j-1} \sim \mathcal{N}(\beta_0 + \beta_1\mu + X\vec\beta, \sigma),
+            $$
+            where $\sigma$ is the error. However, we cannot observe $\mu$ 
+            directly&mdash;we can only obtain an estimate of it, $\tilde\mu$, with
+            some uncertainty $\sigma^2_\mu$:
+            $$
+                \tilde\mu \sim \mathcal{N}(\mu, \sigma^2_\mu).
+            $$
+            The priors for the parameters are
+            $$ \begin{align} 
+                \mu &\sim \mathcal{N}(0, 1) \\
+                \beta_0 &\sim \mathrm{t}_2(0, 10) \\
+                \beta_1 &\sim \mathrm{t}_2(0, 10) \\
+                \vec\beta &\sim \mathrm{t}_2(0, 10) \\
+                \sigma &\sim \mathrm{Cauchy}^+(0, 100) 
+            \end{align}$$
             </p>
         </section>
 

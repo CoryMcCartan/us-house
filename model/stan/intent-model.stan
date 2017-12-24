@@ -35,7 +35,7 @@ transformed parameters {
     pollster_error = RP_pollster * sd_pollster;
     poll_error = RP_poll * sd_poll;
     
-    logit_dem[1] = 10 * delta_dem[1]; // equiv. to N(0, 10) prior on logit_dem[1]
+    logit_dem[1] = 10 * delta_dem[1]; // equiv. to t(nu, 0, 10) prior on logit_dem[1]
     for (i in 2:W)
         logit_dem[i] = rho*logit_dem[i-1] + sd_walk*delta_dem[i];
     
