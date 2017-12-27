@@ -1,6 +1,5 @@
 data {
     int N; // number of observations
-    int Y; // number of years
     int K; // number of addl covariates
     
     vector[N] logit_intent; // logit of voter intent
@@ -38,10 +37,10 @@ model {
     
     seats - before ~ normal(mu, error);
     
-    beta_intent ~ student_t(2, 0, 10);
-    betas ~ student_t(2, 0, 10);
+    beta_intent ~ student_t(3, 0, 10);
+    betas ~ student_t(3, 0, 10);
     
-    error ~ cauchy(0, 100);
+    error ~ cauchy(0, 20);
 }
 
 generated quantities {

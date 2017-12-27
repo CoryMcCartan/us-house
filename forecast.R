@@ -143,10 +143,22 @@ if (file.exists(opt$samples_file)) {
 } else {
     if (opt$recompile && file.exists(paste(results.model.path, ".rds")))
         file.remove(paste0(results.model.path, ".rds"))
+
+    form = ~ midterm*pres + pres:appr + pres:earn + pres:unemp + midterm*I(before-218)
+
+    model.data = read.csv("model/data/combined.csv") %>% filter(weeks_until == 0)
+    data.list = as.list(model.data)
+    data.list$X = model.matrix(form, data=model.data)
+    data.list$K = ncol(data.list$X)
+    data.list$year = with(data.list, (year - min(year))/2 + 1)
+    data.list$N = length(data.list$year)
+    # use estimated s.d. intent from this year, but increased slightly
+    data.list$sd_intent = rep(1.5*sd(samples$logit_dem[,poll.w]), data.list$N)
+
     
     # run results model
     results.model = stan(file=paste0(results.model.path, ".stan"), model_name="results",
-                        data=model.data, iter=11000, warmup=1000, chains=1,
+                        data=data.list, iter=11000, warmup=1000, chains=1,
                         control=list(adapt_delta=0.999, max_treedepth=10))
     
     est = rstan::extract(results.model)

@@ -214,8 +214,8 @@
             \end{align}$$
             The priors for the variance hyperparameters are
             $$ \begin{align} 
-                \sigma_f &\sim \mathrm{Cauchy}^+(0, 10) \\
-                \sigma_\epsilon &\sim \mathrm{Cauchy}^+(0, 10) 
+                \sigma_f &\sim \mathrm{t}^+_4(0, 1) \\
+                \sigma_\epsilon &\sim \mathrm{t}^+_4(0, 1) 
             \end{align}$$
             </p>
 
@@ -226,7 +226,7 @@
             <p>
             The final results model is essentially a linear model regressing
             the change in Democratic seats on national voter intent and several
-            other structural and economic covariates. Importantly, measurement
+            other strucd
             error in voter intent is explicitly modelled.
             </p>
             <p>
@@ -252,11 +252,66 @@
             The priors for the parameters are
             $$ \begin{align} 
                 \mu &\sim \mathcal{N}(0, 1) \\
-                \beta_0 &\sim \mathrm{t}_2(0, 10) \\
-                \beta_1 &\sim \mathrm{t}_2(0, 10) \\
-                \vec\beta &\sim \mathrm{t}_2(0, 10) \\
-                \sigma &\sim \mathrm{Cauchy}^+(0, 100) 
+                \beta_0 &\sim \mathrm{t}_3(0, 10) \\
+                \beta_1 &\sim \mathrm{t}_3(0, 10) \\
+                \vec\beta &\sim \mathrm{t}_3(0, 10) \\
+                \sigma &\sim \mathrm{Cauchy}^+(0, 20) 
             \end{align}$$
+            </p>
+            <p>
+            The model forecasts the change in Democratic seats, which is highly
+            dependent on whether or not there is a Democratic president. 
+            Consequently, most of the terms in the model are interacted with an
+            indicator representing the incumbent party in the White House (1 if 
+            a Democrat, &ndash;1 if a Republican).
+            The full set of additional model covariates is described in the
+            following table:
+            <table>
+                <tr>
+                    <th>Term</th><th>Notes</th>
+                </tr>
+                <tr>
+                    <td>$midterm$</td>
+                    <td>The midterm indicator takes on a value of 1 in midterm
+                        elections and 0 otherwise. Regardless of the party in
+                        power, Democrats generally underperform in midterm
+                        elections due to low turnout.</td>
+                </tr>
+                <tr>
+                    <td>$pres$</td>
+                </tr>
+                <tr>
+                    <td>$midterm\times pres$</td>
+                    <td>This is one of the most important terms in the model, 
+                        since it captures the tendency of midterm elections to
+                        swing dramatically against the party of the incumbent
+                        president.</td>
+                </tr>
+                <tr>
+                    <td>$appr\times pres$</td>
+                    <td><i>appr</i> is the incumbent president&rsquo;s approval
+                        rating.  A popular president helps down-ballot
+                        races.</td>
+                </tr>
+                <tr>
+                    <td>$earn\times pres$</td>
+                    <td><i>earn</i> is production and nonsupervisory hourly
+                        earnings growth over the previous year. This term and
+                        the next capture voters&rsquo; perception of the state
+                        of the economy, which is important in judging the
+                        president&rsquo;s party.</td>
+                </tr>
+                <tr>
+                    <td>$unemp\times pres$</td>
+                    <td><i>unemp</i> is the current unemployment rate.</td>
+                </tr>
+                <tr>
+                    <td>$midterm\times(before - 218)$</td>
+                    <td><i>before</i> is the number of Democratic seats going
+                        into the election, so $before - 218$ is the current
+                        Democratic surplus or deficit of seats.</td>
+                </tr>
+            </table>
             </p>
         </section>
 

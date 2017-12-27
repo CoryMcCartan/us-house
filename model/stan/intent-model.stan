@@ -57,8 +57,8 @@ model {
     
     sd_walk ~ cauchy(0, 10);
     rho ~ beta(2, 1);
-    sd_pollster ~ cauchy(0, 10);
-    sd_poll ~ cauchy(0, 10);
+    sd_pollster ~ student_t(4, 0, 1);
+    sd_poll ~ student_t(4, 0, 1);
 }
 
 generated quantities {
