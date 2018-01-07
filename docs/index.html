@@ -175,7 +175,12 @@
             the <i>t</i>-distribution. The heavier tails of the
             <i>t</i>-distribution allow more extreme shifts in public opinion
             to occur, which may happen after a significant political
-            development. The priors for the parameters are: 
+            development. While a more accurate generative model might be a 
+            finite mixture model in which public opinion is static most of the
+            time, but able to change dramatically after a major shock, the 
+            added complexity of such a model would be unlikely to provide a
+            commensurate increase in accuracy. The priors for the parameters
+            are: 
             $$ \begin{align} 
                 \mu_0 &\sim \mathrm{t}_{\nu}(0, 10^2) \\ 
                 \nu &\sim \Gamma(2, 0.1) \\
@@ -245,7 +250,9 @@
             $$
             where $\sigma$ is the error. However, we cannot observe $\mu$ 
             directly&mdash;we can only obtain an estimate of it, $\tilde\mu$, with
-            some uncertainty $\sigma^2_\mu$:
+            some uncertainty $\sigma^2_\mu$ (both of which are taken from the
+            posterior distribution of the voter intent model, which is very
+            close to normal): 
             $$
                 \tilde\mu \sim \mathcal{N}(\mu, \sigma^2_\mu).
             $$
