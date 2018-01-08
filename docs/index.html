@@ -214,14 +214,19 @@
             $\epsilon_i$ are assumed to be drawn from larger distributions of
             all possible firm and poll errors:
             $$ \begin{align} 
-                \alpha \sim \mathrm{t}_2(0, \sigma^2_f) \\
+                \alpha \sim \mathrm{t}_2(\mu_f, \sigma^2_f) \\
                 \epsilon \sim \mathrm{t}_2(0, \sigma^2_\epsilon)
             \end{align}$$
-            The priors for the variance hyperparameters are
+            The priors for the hyperparameters are
             $$ \begin{align} 
+                \mu_f &\sim \mathcal{N}(0, 0.02) \\
                 \sigma_f &\sim \mathrm{t}^+_4(0, 1) \\
                 \sigma_\epsilon &\sim \mathrm{t}^+_4(0, 1) 
             \end{align}$$
+            Polling firm errors are not fixed to have a mean of zero since in a
+            given election year, there will be an aggregate polling error by
+            all firms.  This is generally within two percentage points, thus the
+            prior or $\mu_f$.
             </p>
 
             $$ \begin{align} 

@@ -18,6 +18,7 @@ parameters {
     
     vector[P] RP_pollster;  
     real<lower=0> sd_pollster; // hyperparameter for pollster errors
+    real mu_pollster; // hyperparameter for global polling error
     
     real<lower=0,upper=1> prop_undecided; 
     
@@ -32,7 +33,7 @@ transformed parameters {
     vector[P] pollster_error;  
     vector[N] poll_error; 
     
-    pollster_error = RP_pollster * sd_pollster;
+    pollster_error = mu_pollster + RP_pollster * sd_pollster;
     poll_error = RP_poll * sd_poll;
     
     logit_dem[1] = 10 * delta_dem[1]; // equiv. to t(nu, 0, 10) prior on logit_dem[1]
@@ -50,6 +51,7 @@ model {
     delta_dem ~ student_t(nu, 0, 1);
     
     RP_pollster ~ student_t(2, 0, 1);
+    mu_pollster ~ normal(0, 0.02);
     RP_poll ~ student_t(2, 0, 1);
     prop_undecided ~ beta(2, 2);
     

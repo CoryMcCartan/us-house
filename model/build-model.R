@@ -29,7 +29,7 @@ intent.model = stan(file="stan/intent-model.stan", model_name="intent",
                     data=model.data, iter=5000, warmup=1000, chains=1,
                     control=list(adapt_delta=0.99, max_treedepth=15))
 # extract samples and estimates
-print(intent.model, pars=c("sd_poll", "sd_walk", "sd_pollster", "nu", "rho"))
+print(intent.model, pars=c("sd_poll", "sd_walk", "sd_pollster", "nu", "rho", "mu_pollster"))
 samples = rstan::extract(intent.model, pars=c("dem_margin", "logit_dem"))
 
 # get mean and sd of expected voter intent
