@@ -1,5 +1,6 @@
 "dem","gop","other","undecided","n_resp","n_side","n_dem","pollster","firm.id","date","type","week"
 0.44,0.37,0.02,0.17,1327,1075,584,"YouGov/Economist",13,2018-01-09,"RV",43
+0.4,0.31,0.04,0.25,2492,1769,997,"Ipsos/Reuters",6,2018-01-09,"Adults",43
 0.42,0.36,0.02,0.2,1236,964,519,"YouGov/Economist",13,2018-01-02,"RV",44
 0.38,0.31,0.04,0.27,2492,1719,947,"Ipsos/Reuters",6,2018-01-02,"Adults",44
 0.44,0.36,0.03,0.18,1236,989,544,"YouGov/Economist",13,2017-12-26,"RV",45
