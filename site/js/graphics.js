@@ -682,7 +682,7 @@ function outcomes(data, el) {
     for (let i = 1; i <= 435; i++) {
         hist[i] = {
             prob: data.seats_dist[i],
-            cuml: data.seats_dist[i] + hist[i-1].cuml,
+            cuml: data.seats_dist[i-1] + hist[i-1].cuml,
         };
     }
 
