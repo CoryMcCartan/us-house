@@ -1,4 +1,5 @@
 "dem","gop","other","undecided","n_resp","n_side","n_dem","pollster","firm.id","date","type","week"
+0.49,0.38,0.05,0.08,807,702,395,"Marist",7,2018-02-07,"RV",38
 0.43,0.37,0.02,0.17,1320,1056,568,"YouGov/Economist",15,2018-02-06,"RV",39
 0.38,0.31,0.05,0.26,3110,2146,1182,"Ipsos/Reuters",6,2018-02-06,"Adults",39
 0.47,0.45,0.03,0.05,711,654,334,"Monmouth University",9,2018-01-30,"RV",40
