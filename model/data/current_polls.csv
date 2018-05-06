@@ -1,4 +1,6 @@
 "dem","gop","other","undecided","n_resp","n_side","n_dem","pollster","firm.id","date","type","week"
+0.42,0.39,0.01,0.17,1273,1031,535,"YouGov/Economist",16,2018-05-01,"RV",27
+0.49,0.41,0.02,0.08,681,613,334,"Monmouth University",9,2018-04-30,"RV",27
 0.43,0.38,0.02,0.18,1270,1029,546,"YouGov/Economist",16,2018-04-24,"RV",28
 0.45,0.34,0.04,0.18,1248,986,562,"Ipsos/Reuters",6,2018-04-24,"RV",28
 0.43,0.38,0.02,0.17,1274,1032,548,"YouGov/Economist",16,2018-04-17,"RV",29
