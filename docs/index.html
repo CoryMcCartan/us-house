@@ -280,10 +280,11 @@
             following table:
             <table>
                 <tr>
-                    <th>Term</th><th>Notes</th>
+                    <th>Term</th><th>Expected effect this election</th><th>Notes</th>
                 </tr>
                 <tr>
                     <td>$midterm$</td>
+                    <td>–7 seats</td>
                     <td>The midterm indicator takes on a value of 1 in midterm
                         elections and 0 otherwise. Regardless of the party in
                         power, Democrats generally underperform in midterm
@@ -291,10 +292,12 @@
                 </tr>
                 <tr>
                     <td>$pres$</td>
+                    <td>+1 seat</td>
                     <td>The White House control indicator.</td>
                 </tr>
                 <tr>
                     <td>$midterm\times pres$</td>
+                    <td>+7 seats</td>
                     <td>This is one of the most important terms in the model, 
                         since it captures the tendency of midterm elections to
                         swing dramatically against the party of the incumbent
@@ -302,12 +305,14 @@
                 </tr>
                 <tr>
                     <td>$appr\times pres$</td>
+                    <td>+0.3 seats</td>
                     <td><i>appr</i> is the incumbent president&rsquo;s approval
                         rating.  A popular president helps down-ballot
                         races.</td>
                 </tr>
                 <tr>
                     <td>$earn\times pres$</td>
+                    <td>+0 seats</td>
                     <td><i>earn</i> is production and nonsupervisory hourly
                         earnings growth over the previous year. This term and
                         the next capture voters&rsquo; perception of the state
@@ -316,16 +321,20 @@
                 </tr>
                 <tr>
                     <td>$unemp\times pres$</td>
+                    <td>+0 seats</td>
                     <td><i>unemp</i> is the current unemployment rate.</td>
                 </tr>
                 <tr>
                     <td>$before - 218$</td>
+                    <td>+1 seat</td>
                     <td><i>before</i> is the number of Democratic seats going
                         into the election, so $before - 218$ is the current
                         Democratic surplus or deficit of seats.</td>
                 </tr>
                 <tr>
                     <td>$midterm\times(before - 218)$</td>
+                    <td>+17 seats</td>
+                    <td></td>
                 </tr>
             </table>
             </p>
