@@ -123,6 +123,7 @@ intent.model = sampling(model.obj, data=model.data,
                         show_messages=F, refresh=-1,
                         control=list(adapt_delta=0.99, max_treedepth=15))
 
+
 # extract samples and estimates
 samples = rstan::extract(intent.model, pars=c("dem_margin", "logit_dem"))
 
