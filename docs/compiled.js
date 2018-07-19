@@ -17337,8 +17337,10 @@ function generic(data, el) {
         .domain([startDate, endDate]);
     let bisector$$1 = bisector(d => d.date).left;
 
+    ymin = Math.min(0, 1.05*min(data, d => d.bot));
+    ymax = Math.max(0, 1.05*max(data, d => d.bot));
     let y = linear$2()
-        .domain([1.05*min(data, d => d.bot), 1.05*max(data, d => d.top)])
+        .domain([ymin, ymax])
         .nice();
     let probFormat = format(".0%");
 
