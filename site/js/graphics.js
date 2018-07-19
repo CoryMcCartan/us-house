@@ -471,8 +471,8 @@ function generic(data, el) {
         .domain([startDate, endDate]);
     let bisector = d3.bisector(d => d.date).left;
 
-    let ymin = Math.min(0, 1.05*d3.min(data, d => d.bot))
-    let ymax = Math.max(0, 1.05*d3.max(data, d => d.bot))
+    let ymin = Math.min(0, d3.min(data, d => d.bot) - 0.01)
+    let ymax = Math.max(0, d3.max(data, d => d.top) + 0.01)
     let y = d3.scaleLinear()
         .domain([ymin, ymax])
         .nice();
