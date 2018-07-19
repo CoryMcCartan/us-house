@@ -22,12 +22,12 @@
   "author": "Cory McCartan",
   "license": "ISC",
   "devDependencies": {
-    "rollup-plugin-commonjs": "^8.0.2",
-    "rollup-plugin-node-resolve": "^3.0.0",
-    "uglify-es": "^3.0.27"
+    "rollup-plugin-commonjs": "^8.4.1",
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "uglify-es": "^3.3.9"
   },
   "dependencies": {
-    "d3": "^4.9.1",
-    "node-sass": "^4.7.2"
+    "d3": "^4.13.0",
+    "node-sass": "^4.9.2"
   }
 }
