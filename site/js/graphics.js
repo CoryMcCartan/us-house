@@ -471,8 +471,10 @@ function generic(data, el) {
         .domain([startDate, endDate]);
     let bisector = d3.bisector(d => d.date).left;
 
+    ymin = Math.min(0, 1.05*d3.min(data, d => d.bot))
+    ymax = Math.max(0, 1.05*d3.max(data, d => d.bot))
     let y = d3.scaleLinear()
-        .domain([1.05*d3.min(data, d => d.bot), 1.05*d3.max(data, d => d.top)])
+        .domain([ymin, ymax])
         .nice();
     let probFormat = d3.format(".0%");
 
