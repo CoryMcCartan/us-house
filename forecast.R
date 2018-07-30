@@ -16,7 +16,7 @@ option_list = list(
                 help="Dry run, results not saved."),
     make_option("--date", type="character", default=as.character(Sys.Date()),
                 help="The date to estimate from."),
-    make_option("--iter", type="integer", default=4000,
+    make_option("--iter", type="integer", default=750,
                 help="Number of MCMC iterations for voter intent estimation."),
     make_option("--recompile", action="store_true", default=F,
             help="Force recompile of STAN model."),
@@ -119,7 +119,7 @@ if (file.exists(compiled.model)) {
     saveRDS(model.obj, compiled.model)
 }
 intent.model = sampling(model.obj, data=model.data, 
-                        iter=opt$iter+1000, warmup=1000, chains=1,
+                        iter=opt$iter+750, warmup=750, chains=1,
                         show_messages=F, refresh=-1,
                         control=list(adapt_delta=0.99, max_treedepth=15))
 
