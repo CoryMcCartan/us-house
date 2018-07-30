@@ -174,7 +174,8 @@ post_pred = function(est, new.d) {
     form = ~ midterm*pres + pres:appr + pres:earn + pres:unemp + midterm*I(before-218)
     X = model.matrix(form, data=new.d)
     N = length(est$error)
-    logit_true = rnorm(N, new.d$logit_intent, new.d$sd_intent)
+    logit_true = sample(samples$logit_dem[,model.data$W], 1)
+    #rnorm(N, new.d$logit_intent, new.d$sd_intent)
     mu = est$beta_intent*logit_true + c(est$betas %*% t(X))
     rnorm(N, mu, est$error) + new.d$before
 }
