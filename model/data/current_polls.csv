@@ -1,4 +1,5 @@
 "dem","gop","other","undecided","n_resp","n_side","n_dem","pollster","firm.id","date","type","week"
+0.55,0.42,0,0.03,752,729,414,"ABC/Post",1,2018-10-11,"Likely Voters",3
 0.47,0.41,0.01,0.11,1162,1023,546,"YouGov/Economist",24,2018-10-09,"RV",4
 0.5,0.38,0.05,0.07,2012,1771,1006,"Ipsos/Reuters",10,2018-10-09,"Likely Voters",4
 0.45,0.4,0.01,0.13,1227,1043,552,"YouGov/Economist",24,2018-10-02,"RV",5
