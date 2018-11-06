@@ -136,11 +136,11 @@ intent.model = sampling(model.obj, data=model.data,
                         show_messages=F, refresh=-1,
                         control=list(adapt_delta=0.99, max_treedepth=15))
 
-%int.mod.2 = optimizing(model.obj, data=model.data, as_vector=F)
+#int.mod.2 = optimizing(model.obj, data=model.data, as_vector=F)
 
 # extract samples and estimates
 samples = rstan::extract(intent.model, pars=c("dem_margin", "logit_dem"))
-%logit.est = int.mod.2$par$logit_dem[model.data$W]
+#logit.est = int.mod.2$par$logit_dem[model.data$W]
 
 # get mean and sd of expected voter intent
 logit.est = mean(samples$logit_dem[,model.data$W])

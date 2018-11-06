@@ -1,0 +1,29 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1541522825010.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "F82BDB84",
+    "lastKnownWriteTime" : 4294967302,
+    "last_content_update" : 1541522825010,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "B8C98B54",
+        "caption" : "polls",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=polls&cache_key=B8C98B54",
+        "displayedObservations" : 197,
+        "environment" : "",
+        "object" : "polls",
+        "preview" : 0,
+        "totalObservations" : 197,
+        "variables" : 12
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}
