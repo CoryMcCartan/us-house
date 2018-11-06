@@ -72,6 +72,19 @@ polls = suppressMessages(pollster_charts_polls("2018-national-house-race"))[["co
     filter(date <= from.date) %>%
     as.data.frame
 
+#polls = read.csv("generic_polllist.csv") %>% 
+#    transmute(dem = dem / 100,
+#              gop = rep / 100,
+#              n_resp = as.integer(samplesize),
+#              n_side = round((dem + gop) * n_resp),
+#              n_dem = round(dem * n_resp),
+#              pollster = pollster,
+#              firm.id = as.numeric(as.factor(pollster)),
+#              date = mdy(enddate),
+#              type = population) %>%
+#    filter(date <= from.date) %>% 
+#    as.data.frame
+
 # drop missing data
 polls = polls[complete.cases(polls),]
 
@@ -123,9 +136,11 @@ intent.model = sampling(model.obj, data=model.data,
                         show_messages=F, refresh=-1,
                         control=list(adapt_delta=0.99, max_treedepth=15))
 
+%int.mod.2 = optimizing(model.obj, data=model.data, as_vector=F)
 
 # extract samples and estimates
 samples = rstan::extract(intent.model, pars=c("dem_margin", "logit_dem"))
+%logit.est = int.mod.2$par$logit_dem[model.data$W]
 
 # get mean and sd of expected voter intent
 logit.est = mean(samples$logit_dem[,model.data$W])
