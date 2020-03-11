@@ -5,6 +5,7 @@ library(loo)
 library(shinystan)
 library(rstan)
 library(magrittr)
+library(gtools)
 library(dplyr)
 
 rstan_options(auto_write = TRUE)
@@ -13,19 +14,30 @@ options(mc.cores = parallel::detectCores())
 ####################
 #   VOTER INTENT   #
 ####################
-polls = read.csv("data/current_polls.csv", colClasses=c(date="Date"))
+polls = read.csv("model/data/current_polls.csv", colClasses=c(date="Date"))
 model.data = list(W = 1 + max(polls$week),
                   P = max(polls$firm.id),
                   N = nrow(polls),
                   w = 1 + max(polls$week) - polls$week,
+                  d = as.numeric((polls$date - min(polls$date)) / 7),
+                  dp = 1:(1 + max(polls$week)),
                   p = polls$firm.id,
+                  ldem = with(polls, logit(dem / (dem + gop))),
                   n_resp = polls$n_resp,
                   n_side = polls$n_side,
                   n_dem = polls$n_dem)
 poll.w = max(model.data$w)
 
+
+intent.model = stan(file="model/stan/gp-intent-model.stan", model_name="intent",
+                    data=model.data, iter=1000, warmup=500, chains=1)#,
+                    #control=list(adapt_delta=0.99, max_treedepth=15))
+
+intent.model = stan_model(file="model/stan/gp-intent-model.stan")
+model.results = sampling(intent.model, data=model.data, iter=100, chains=1)
+
 # run intent model
-intent.model = stan(file="stan/intent-model.stan", model_name="intent",
+intent.model = stan(file="model/stan/intent-model.stan", model_name="intent",
                     data=model.data, iter=5000, warmup=1000, chains=1,
                     control=list(adapt_delta=0.99, max_treedepth=15))
 # extract samples and estimates

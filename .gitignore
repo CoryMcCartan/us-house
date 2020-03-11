@@ -5,3 +5,4 @@
 .DS_Store
 .Rhistory
 site/node_modules/
+.Rproj.user/
